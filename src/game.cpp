@@ -29,8 +29,10 @@ void Game::run(Controller const &&controller, Renderer &&renderer,
 
     frameEnd = SDL_GetTicks();
 
-    // Keep track of how long each loop through the input/update/render cycle
-    // takes.
+    /*
+     * Keep track of how long each frame loop through 
+     * the input/update/render cycle
+     */
     frameCount++;
     frameDuration = frameEnd - frameStart;
 
@@ -41,9 +43,11 @@ void Game::run(Controller const &&controller, Renderer &&renderer,
       titleTimestamp = frameEnd;
     }
 
-    // If the time for this frame is too small (i.e. frameDuration is
-    // smaller than the target ms_per_frame), delay the loop to
-    // achieve the correct frame rate.
+    /*
+     * If the time for this frame is too small (i.e. frameDuration is
+     * smaller than the target ms_per_frame), delay the loop to
+     * achieve the correct frame rate.
+     */
     if (frameDuration < targetFrameDuration) {
       SDL_Delay(targetFrameDuration - frameDuration);
     }
@@ -55,8 +59,10 @@ void Game::placeFood_() {
   while (true) {
     x = _randomWidth(_engine);
     y = _randomHeight(_engine);
-    // Check that the location is not occupied by a snake item before placing
-    // food.
+    /*
+     * Check that the location is not occupied by a snake item 
+     * before placing food.
+     */
     if (!_snake.snakeCell(x, y)) {
       _food.x = x;
       _food.y = y;
