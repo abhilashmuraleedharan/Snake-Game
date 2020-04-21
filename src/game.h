@@ -9,25 +9,33 @@
 
 class Game {
  public:
-  Game(std::size_t grid_width, std::size_t grid_height);
-  void Run(Controller const &controller, Renderer &renderer,
-           std::size_t target_frame_duration);
-  int GetScore() const;
-  int GetSize() const;
+  // Constructor
+  Game(std::size_t gridWidth, std::size_t gridHeight);
+
+  // Public Methods
+  void run(Controller const &controller, Renderer &renderer,
+           std::size_t targetFrameDuration);
+
+  // Getters
+  int getScore() const;
+  int getSize() const;
 
  private:
-  Snake snake;
-  SDL_Point food;
 
-  std::random_device dev;
-  std::mt19937 engine;
-  std::uniform_int_distribution<int> random_w;
-  std::uniform_int_distribution<int> random_h;
+  // Private methods
+  void placeFood_();
+  void update_();
 
-  int score{0};
+  // Private data
+  Snake    _snake;
+  SDL_Point _food;
+  int   _score{0};
 
-  void PlaceFood();
-  void Update();
+  std::random_device _dev;
+  std::mt19937    _engine;
+  std::uniform_int_distribution<int> _randomWidth;
+  std::uniform_int_distribution<int> _randomHeight;
+
 };
 
 #endif
