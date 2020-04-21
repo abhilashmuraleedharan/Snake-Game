@@ -41,7 +41,47 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::render(Snake const snake, SDL_Point const &food) {
+// Move Constructor
+Renderer::Renderer(Renderer &&source) {
+  _sdlWindowPtr   = source._sdlWindowPtr;
+  _sdlRendererPtr = source._sdlRendererPtr;
+  _screenWidth    = source._screenWidth;
+  _screenHeight   = source._screenHeight;
+  _gridWidth      = source._gridWidth;
+  _gridHeight     = source._gridHeight;
+
+  // Invalidating source after move operation
+  source._sdlWindowPtr   = nullptr;
+  source._sdlRendererPtr = nullptr;
+  source._screenWidth    = 0;
+  source._screenHeight   = 0;
+  source._gridWidth      = 0;
+  source._gridHeight     = 0;
+}
+
+// Move Assignment Operator
+Renderer &Renderer::operator=(Renderer &&source) {
+  if (this == &source) { return *this; }  // To handle self assignment scenario
+
+  _sdlWindowPtr   = source._sdlWindowPtr;
+  _sdlRendererPtr = source._sdlRendererPtr;
+  _screenWidth    = source._screenWidth;
+  _screenHeight   = source._screenHeight;
+  _gridWidth      = source._gridWidth;
+  _gridHeight     = source._gridHeight;
+
+  // Invalidating source after move operation
+  source._sdlWindowPtr   = nullptr;
+  source._sdlRendererPtr = nullptr;
+  source._screenWidth    = 0;
+  source._screenHeight   = 0;
+  source._gridWidth      = 0;
+  source._gridHeight     = 0;
+
+  return *this;
+}
+
+void Renderer::render(Snake const &snake, SDL_Point const &food) {
   SDL_Rect block;
   block.w = _screenWidth / _gridWidth;
   block.h = _screenHeight / _gridHeight;
