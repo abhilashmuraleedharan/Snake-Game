@@ -33,7 +33,7 @@ class Snake {
  private:
   // Private methods
   void updateHead_();
-  void updateBody_(SDL_Point &currentHeadCell, SDL_Point &previousHeadCell);
+  void updateBody_(SDL_Point &&currentHeadCell, SDL_Point &&previousHeadCell);
 
   // Private Data
   bool _growing{false};

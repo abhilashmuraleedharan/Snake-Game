@@ -20,7 +20,7 @@ void Snake::update() {
    * if the snake head has moved to a new cell.
    */
   if (currentCell.x != previousCell.x || currentCell.y != previousCell.y) {
-    updateBody_(currentCell, previousCell);
+    updateBody_(std::move(currentCell), std::move(previousCell));
   }
 }
 
@@ -48,9 +48,9 @@ void Snake::updateHead_() {
   headY = fmod(headY + _gridHeight, _gridHeight);
 }
 
-void Snake::updateBody_(SDL_Point &currentHeadCell, SDL_Point &previousHeadCell) {
+void Snake::updateBody_(SDL_Point &&currentHeadCell, SDL_Point &&previousHeadCell) {
   // Add previous head location to vector
-  body.push_back(previousHeadCell);
+  body.push_back(std::move(previousHeadCell));
 
   if (!_growing) {
     // Remove the tail from the vector.
