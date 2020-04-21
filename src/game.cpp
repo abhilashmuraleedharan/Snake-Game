@@ -57,7 +57,7 @@ void Game::PlaceFood() {
     y = random_h(engine);
     // Check that the location is not occupied by a snake item before placing
     // food.
-    if (!snake.SnakeCell(x, y)) {
+    if (!snake.snakeCell(x, y)) {
       food.x = x;
       food.y = y;
       return;
@@ -68,17 +68,17 @@ void Game::PlaceFood() {
 void Game::Update() {
   if (!snake.alive) return;
 
-  snake.Update();
+  snake.update();
 
-  int new_x = static_cast<int>(snake.head_x);
-  int new_y = static_cast<int>(snake.head_y);
+  int new_x = static_cast<int>(snake.headX);
+  int new_y = static_cast<int>(snake.headY);
 
   // Check if there's food over here
   if (food.x == new_x && food.y == new_y) {
     score++;
     PlaceFood();
     // Grow snake and increase speed.
-    snake.GrowBody();
+    snake.growBody();
     snake.speed += 0.02;
   }
 }
