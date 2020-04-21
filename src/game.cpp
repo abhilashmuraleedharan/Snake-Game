@@ -25,7 +25,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food);
+    renderer.render(snake, food);
 
     frame_end = SDL_GetTicks();
 
@@ -36,7 +36,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 
     // After every second, update the window title.
     if (frame_end - title_timestamp >= 1000) {
-      renderer.UpdateWindowTitle(score, frame_count);
+      renderer.updateWindowTitle(score, frame_count);
       frame_count = 0;
       title_timestamp = frame_end;
     }
