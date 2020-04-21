@@ -13,8 +13,8 @@ class Game {
   Game(std::size_t gridWidth, std::size_t gridHeight);
 
   // Public Methods
-  void run(Controller const &controller, Renderer &renderer,
-           std::size_t targetFrameDuration);
+  void run(Controller const &&controller, Renderer &&renderer,
+           const std::size_t &targetFrameDuration);
 
   // Getters
   int getScore() const;

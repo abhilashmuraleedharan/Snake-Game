@@ -10,8 +10,8 @@ Game::Game(std::size_t gridWidth, std::size_t gridHeight)
   placeFood_();
 }
 
-void Game::run(Controller const &controller, Renderer &renderer,
-               std::size_t targetFrameDuration) {
+void Game::run(Controller const &&controller, Renderer &&renderer,
+               const std::size_t &targetFrameDuration) {
   Uint32 titleTimestamp = SDL_GetTicks();
   Uint32 frameStart;
   Uint32 frameEnd;
@@ -84,4 +84,4 @@ void Game::update_() {
 }
 
 int Game::getScore() const { return _score; }
-int Game::getSize() const { return _snake.size; }
+int Game::getSize()  const { return _snake.size; }
