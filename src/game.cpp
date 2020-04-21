@@ -5,8 +5,8 @@
 Game::Game(std::size_t gridWidth, std::size_t gridHeight)
     : _snake(gridWidth, gridHeight),
       _engine(_dev()),
-      _randomWidth(0,  static_cast<int>(gridWidth)),
-      _randomHeight(0, static_cast<int>(gridHeight)) {
+      _randomWidth(1,  static_cast<int>(gridWidth)),
+      _randomHeight(1, static_cast<int>(gridHeight)) {
   placeFood_();
 }
 
