@@ -9,12 +9,18 @@ Renderer::Renderer(const std::size_t screenWidth,
     : _screenWidth(screenWidth),
       _screenHeight(screenHeight),
       _gridWidth(gridWidth),
-      _gridHeight(gridHeight) {
+      _gridHeight(gridHeight)  {
 
   // Initialize SDL
-  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
     std::cerr << "SDL could not initialize.\n";
     std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
+  }
+
+  // Initialize SDL Mixer
+  if (Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0) {
+    std::cerr << "SDL_mixer could not initialize.\n";
+    std::cerr << "SDL_mixer Error: " << Mix_GetError() << "\n";
   }
 
   // Create Window
@@ -33,11 +39,28 @@ Renderer::Renderer(const std::size_t screenWidth,
     std::cerr << "Renderer could not be created.\n";
     std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
   }
+
+  // Load bite sound effect
+  _biteSoundPtr = Mix_LoadWAV(biteSoundPath.c_str());
+  if (nullptr == _biteSoundPtr) {
+    std::cerr << "Failed to load biting sound effect.\n";
+    std::cerr << "SDL_mixer Error: " << Mix_GetError() << "\n";
+  }
+
+  // Load dead snake sound effect
+  _deadSoundPtr = Mix_LoadWAV(deadSoundPath.c_str());
+  if (nullptr == _deadSoundPtr) {
+    std::cerr << "Failed to load dead snake sound effect.\n";
+    std::cerr << "SDL_mixer Error: " << Mix_GetError() << "\n";
+  }
 }
 
 Renderer::~Renderer() {
+  Mix_FreeChunk(_deadSoundPtr);
+  Mix_FreeChunk(_biteSoundPtr);
   SDL_DestroyRenderer(_sdlRendererPtr);
   SDL_DestroyWindow(_sdlWindowPtr);
+  Mix_Quit();
   SDL_Quit();
 }
 
@@ -45,18 +68,24 @@ Renderer::~Renderer() {
 Renderer::Renderer(Renderer &&source) {
   _sdlWindowPtr   = source._sdlWindowPtr;
   _sdlRendererPtr = source._sdlRendererPtr;
+  _biteSoundPtr   = source._biteSoundPtr;
+  _deadSoundPtr   = source._deadSoundPtr;
   _screenWidth    = source._screenWidth;
   _screenHeight   = source._screenHeight;
   _gridWidth      = source._gridWidth;
   _gridHeight     = source._gridHeight;
+  soundEffect     = source.soundEffect;
 
   // Invalidating source after move operation
   source._sdlWindowPtr   = nullptr;
   source._sdlRendererPtr = nullptr;
+  source._biteSoundPtr   = nullptr;
+  source._deadSoundPtr   = nullptr;
   source._screenWidth    = 0;
   source._screenHeight   = 0;
   source._gridWidth      = 0;
   source._gridHeight     = 0;
+  source.soundEffect     = SoundEffect::kNoSound;
 }
 
 // Move Assignment Operator
@@ -65,18 +94,24 @@ Renderer &Renderer::operator=(Renderer &&source) {
 
   _sdlWindowPtr   = source._sdlWindowPtr;
   _sdlRendererPtr = source._sdlRendererPtr;
+  _biteSoundPtr   = source._biteSoundPtr;
+  _deadSoundPtr   = source._deadSoundPtr;
   _screenWidth    = source._screenWidth;
   _screenHeight   = source._screenHeight;
   _gridWidth      = source._gridWidth;
   _gridHeight     = source._gridHeight;
+  soundEffect     = source.soundEffect;
 
   // Invalidating source after move operation
   source._sdlWindowPtr   = nullptr;
   source._sdlRendererPtr = nullptr;
+  source._biteSoundPtr   = nullptr;
+  source._deadSoundPtr   = nullptr;
   source._screenWidth    = 0;
   source._screenHeight   = 0;
   source._gridWidth      = 0;
   source._gridHeight     = 0;
+  source.soundEffect     = SoundEffect::kNoSound;
 
   return *this;
 }
@@ -121,4 +156,18 @@ void Renderer::render(Snake const &snake, SDL_Point const &food) {
 void Renderer::updateWindowTitle(int score, int fps) {
   std::string title{"Snake Score: " + std::to_string(score) + " FPS: " + std::to_string(fps)};
   SDL_SetWindowTitle(_sdlWindowPtr, title.c_str());
+}
+
+void Renderer::play(SoundEffect sound) {
+  switch (sound) {
+    case SoundEffect::kbiteSound:
+       Mix_PlayChannel(-1, _biteSoundPtr, 0);
+       break;
+    case SoundEffect::kdeadSnakeSound:
+       Mix_PlayChannel(-1, _deadSoundPtr, 0);
+       break;
+    default:
+       // Play no sound
+       break;
+  }
 }

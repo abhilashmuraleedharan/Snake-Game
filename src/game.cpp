@@ -2,16 +2,22 @@
 #include <iostream>
 #include "SDL.h"
 
-Game::Game(std::size_t gridWidth, std::size_t gridHeight)
+Game::Game(std::size_t gridWidth, std::size_t gridHeight,
+           Controller &&controller, Renderer &&renderer)
     : _snake(gridWidth, gridHeight),
+      _gController(std::move(controller)),
+      _gRenderer(std::move(renderer)),
       _engine(_dev()),
-      _randomWidth(1,  static_cast<int>(gridWidth)),
-      _randomHeight(1, static_cast<int>(gridHeight)) {
+      /*
+       * Set the range starting from 1 to grid-dimension - 1
+       * so that the food does not get generated outside the box 
+       */
+      _randomW(1,  static_cast<int>(gridWidth)-1),  
+      _randomH(1, static_cast<int>(gridHeight)-1) {
   placeFood_();
 }
 
-void Game::run(Controller const &&controller, Renderer &&renderer,
-               const std::size_t &targetFrameDuration) {
+void Game::run(const std::size_t &targetFrameDuration) {
   Uint32 titleTimestamp = SDL_GetTicks();
   Uint32 frameStart;
   Uint32 frameEnd;
@@ -23,9 +29,9 @@ void Game::run(Controller const &&controller, Renderer &&renderer,
     frameStart = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
-    controller.handleInput(running, _snake);
-    update_();
-    renderer.render(_snake, _food);
+    _gController.handleInput(running, _snake);
+    update_(running);
+    _gRenderer.render(_snake, _food);
 
     frameEnd = SDL_GetTicks();
 
@@ -38,7 +44,7 @@ void Game::run(Controller const &&controller, Renderer &&renderer,
 
     // After every second, update the window title.
     if (frameEnd - titleTimestamp >= 1000) {
-      renderer.updateWindowTitle(_score, frameCount);
+      _gRenderer.updateWindowTitle(_score, frameCount);
       frameCount = 0;
       titleTimestamp = frameEnd;
     }
@@ -57,8 +63,8 @@ void Game::run(Controller const &&controller, Renderer &&renderer,
 void Game::placeFood_() {
   int x, y;
   while (true) {
-    x = _randomWidth(_engine);
-    y = _randomHeight(_engine);
+    x = _randomW(_engine);
+    y = _randomH(_engine);
     /*
      * Check that the location is not occupied by a snake item 
      * before placing food.
@@ -71,8 +77,13 @@ void Game::placeFood_() {
   }
 }
 
-void Game::update_() {
-  if (!_snake.alive) return;
+void Game::update_(bool &running) {
+  if (!_snake.alive) {
+    _gRenderer.play(Renderer::SoundEffect::kdeadSnakeSound);
+    running = false;
+    SDL_Delay(1000); // Adding 1 sec delay to prevent a quick exit
+    return;
+  }
 
   _snake.update();
 
@@ -81,6 +92,7 @@ void Game::update_() {
 
   // Check if there's food over here
   if (_food.x == newX && _food.y == newY) {
+    _gRenderer.play(Renderer::SoundEffect::kbiteSound);
     _score++;
     placeFood_();
     // Grow snake and increase speed.

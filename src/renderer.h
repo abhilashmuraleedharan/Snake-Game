@@ -2,11 +2,16 @@
 #define RENDERER_H
 
 #include <vector>
+#include <string>
 #include "SDL.h"
+#include "SDL_mixer.h"
 #include "snake.h"
 
 class Renderer {
  public:
+  // Define SoundEffect Type
+  enum class SoundEffect { kbiteSound, kdeadSnakeSound, kNoSound };
+
   // Constructor
   Renderer(const std::size_t screenWidth, const std::size_t screenHeight,
            const std::size_t gridWidth, const std::size_t gridHeight);
@@ -30,10 +35,18 @@ class Renderer {
   // Public methods
   void render(Snake const &snake, SDL_Point const &food);
   void updateWindowTitle(int score, int fps);
+  void play(SoundEffect sound);
+
+  // Public data
+  const std::string biteSoundPath{"../assets/biting-sound.wav"};
+  const std::string deadSoundPath{"../assets/dead.wav"};
+  SoundEffect soundEffect{SoundEffect::kNoSound};
 
  private:
   SDL_Window   *_sdlWindowPtr;
   SDL_Renderer *_sdlRendererPtr;
+  Mix_Chunk    *_biteSoundPtr;   // To store biting sound effect
+  Mix_Chunk    *_deadSoundPtr;   // To store dead snake sound effect
 
   std::size_t _screenWidth;
   std::size_t _screenHeight;

@@ -64,6 +64,7 @@ void Snake::updateBody_(SDL_Point &&currentHeadCell, SDL_Point &&previousHeadCel
   for (auto const &item : body) {
     if (currentHeadCell.x == item.x && currentHeadCell.y == item.y) {
       alive = false;
+      break;
     }
   }
 }
