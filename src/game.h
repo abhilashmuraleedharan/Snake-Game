@@ -15,6 +15,7 @@ class Game {
 
   // Public Methods
   void run(const std::size_t &targetFrameDuration);
+  void showGameBanner();
 
   // Getters
   int getScore() const;

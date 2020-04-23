@@ -102,4 +102,14 @@ void Game::update_(bool &running) {
 }
 
 int Game::getScore() const { return _score; }
+
 int Game::getSize()  const { return _snake.size; }
+
+void Game::showGameBanner() {
+  std::cout << "  _________              __           " << "\n";
+  std::cout << " /   _____/ ____ _____  |  | __ ____  " << "\n";
+  std::cout << " \\_____  \\ /    \\\\__  \\ |  |/ // __ \\ " << "\n";
+  std::cout << " /        \\   |  \\/ __ \\|    <\\  ___/ " << "\n";
+  std::cout << "/_______  /___|  (____  /__|_ \\\\___  >" << "\n";
+  std::cout << std::endl;
+}
