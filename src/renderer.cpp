@@ -33,7 +33,7 @@ Renderer::Renderer(const std::size_t screenWidth,
     std::cerr << " SDL_Error: " << SDL_GetError() << "\n";
   }
 
-  // Create renderer
+  // Create Renderer
   _sdlRendererPtr = SDL_CreateRenderer(_sdlWindowPtr, -1, SDL_RENDERER_ACCELERATED);
   if (nullptr == _sdlRendererPtr) {
     std::cerr << "Renderer could not be created.\n";
@@ -41,14 +41,14 @@ Renderer::Renderer(const std::size_t screenWidth,
   }
 
   // Load bite sound effect
-  _biteSoundPtr = Mix_LoadWAV(biteSoundPath.c_str());
+  _biteSoundPtr = Mix_LoadWAV(kBiteSoundPath.c_str());
   if (nullptr == _biteSoundPtr) {
     std::cerr << "Failed to load biting sound effect.\n";
     std::cerr << "SDL_mixer Error: " << Mix_GetError() << "\n";
   }
 
   // Load dead snake sound effect
-  _deadSoundPtr = Mix_LoadWAV(deadSoundPath.c_str());
+  _deadSoundPtr = Mix_LoadWAV(kDeadSoundPath.c_str());
   if (nullptr == _deadSoundPtr) {
     std::cerr << "Failed to load dead snake sound effect.\n";
     std::cerr << "SDL_mixer Error: " << Mix_GetError() << "\n";
@@ -126,13 +126,13 @@ void Renderer::render(Snake const &snake, SDL_Point const &food) {
   SDL_RenderClear(_sdlRendererPtr);
 
   // Render food
-  SDL_SetRenderDrawColor(_sdlRendererPtr, 0xFF, 0xCC, 0x00, 0xFF);
+  SDL_SetRenderDrawColor(_sdlRendererPtr, 0xFF, 0xCC, 0x00, 0xFF);  // yellow
   block.x = food.x * block.w;
   block.y = food.y * block.h;
   SDL_RenderFillRect(_sdlRendererPtr, &block);
 
   // Render snake's body
-  SDL_SetRenderDrawColor(_sdlRendererPtr, 0xFF, 0xFF, 0xFF, 0xFF);
+  SDL_SetRenderDrawColor(_sdlRendererPtr, 0xFF, 0xFF, 0xFF, 0xFF);  // white
   for (SDL_Point const &point : snake.body) {
     block.x = point.x * block.w;
     block.y = point.y * block.h;
@@ -143,9 +143,9 @@ void Renderer::render(Snake const &snake, SDL_Point const &food) {
   block.x = static_cast<int>(snake.headX) * block.w;
   block.y = static_cast<int>(snake.headY) * block.h;
   if (snake.alive) {
-    SDL_SetRenderDrawColor(_sdlRendererPtr, 0x00, 0x7A, 0xCC, 0xFF);
+    SDL_SetRenderDrawColor(_sdlRendererPtr, 0x00, 0x7A, 0xCC, 0xFF);  // blue
   } else {
-    SDL_SetRenderDrawColor(_sdlRendererPtr, 0xFF, 0x00, 0x00, 0xFF);
+    SDL_SetRenderDrawColor(_sdlRendererPtr, 0xFF, 0x00, 0x00, 0xFF);  // red
   }
   SDL_RenderFillRect(_sdlRendererPtr, &block);
 
@@ -153,8 +153,13 @@ void Renderer::render(Snake const &snake, SDL_Point const &food) {
   SDL_RenderPresent(_sdlRendererPtr);
 }
 
-void Renderer::updateWindowTitle(int score, int fps) {
-  std::string title{"Snake Score: " + std::to_string(score) + " FPS: " + std::to_string(fps)};
+void Renderer::updateWindowTitle(std::string name, int score, bool withHighScore, int highScore) {
+  std::string title{};
+  if (withHighScore) {
+    title = std::string{"Player: " + name + "   " + " Score: " + std::to_string(score) + "   " + "Highest Score: " + std::to_string(highScore)};
+  } else {
+    title = std::string{"Player: " + name + "       " + " Score: " + std::to_string(score)};
+  }
   SDL_SetWindowTitle(_sdlWindowPtr, title.c_str());
 }
 

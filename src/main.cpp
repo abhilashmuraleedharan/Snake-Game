@@ -1,22 +1,28 @@
 #include <iostream>
+#include <thread>
+#include <memory>
 #include "controller.h"
 #include "game.h"
 #include "renderer.h"
 
 int main() {
-  constexpr std::size_t kFramesPerSecond{60};
-  constexpr std::size_t kMsPerFrame{1000 / kFramesPerSecond};
+  // Define Game constants
   constexpr std::size_t kScreenWidth{640};
   constexpr std::size_t kScreenHeight{640};
   constexpr std::size_t kGridWidth{32};
   constexpr std::size_t kGridHeight{32};
 
+  // Create Renderer instance
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
+
+  // Create Controller instance
   Controller controller;
+
+  // Create Game instance
   Game game(kGridWidth, kGridHeight, std::move(controller), std::move(renderer));
-  game.run(kMsPerFrame);
-  std::cout << "Game has terminated successfully!\n";
-  std::cout << "Score: " << game.getScore() << "\n";
-  std::cout << "Size: " << game.getSize() << "\n";
+
+  // Run the Game
+  game.run();
+
   return 0;
 }
