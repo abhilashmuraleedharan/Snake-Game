@@ -26,6 +26,13 @@ void Snake::update() {
 
 void Snake::updateHead_() {
   switch (direction) {
+    /*
+     * In computer screens (even the mobile ones) the origin point (0,0) always start at
+     * the top left of the screen. Like the 4th quadrant in the graph.
+     * So y coordinate value decreases as you go downwards and increases when you go upwards
+     * Similarly, x coordinates increases as you go right and decreases when you go left.
+     * This is the concept that's used to control the direction of the Snake
+     */
     case Direction::kUp:
       headY -= speed;
       break;

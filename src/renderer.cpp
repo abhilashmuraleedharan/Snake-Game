@@ -33,7 +33,7 @@ Renderer::Renderer(const std::size_t screenWidth,
     std::cerr << " SDL_Error: " << SDL_GetError() << "\n";
   }
 
-  // Create renderer
+  // Create Renderer
   _sdlRendererPtr = SDL_CreateRenderer(_sdlWindowPtr, -1, SDL_RENDERER_ACCELERATED);
   if (nullptr == _sdlRendererPtr) {
     std::cerr << "Renderer could not be created.\n";
@@ -41,14 +41,14 @@ Renderer::Renderer(const std::size_t screenWidth,
   }
 
   // Load bite sound effect
-  _biteSoundPtr = Mix_LoadWAV(biteSoundPath.c_str());
+  _biteSoundPtr = Mix_LoadWAV(kBiteSoundPath.c_str());
   if (nullptr == _biteSoundPtr) {
     std::cerr << "Failed to load biting sound effect.\n";
     std::cerr << "SDL_mixer Error: " << Mix_GetError() << "\n";
   }
 
   // Load dead snake sound effect
-  _deadSoundPtr = Mix_LoadWAV(deadSoundPath.c_str());
+  _deadSoundPtr = Mix_LoadWAV(kDeadSoundPath.c_str());
   if (nullptr == _deadSoundPtr) {
     std::cerr << "Failed to load dead snake sound effect.\n";
     std::cerr << "SDL_mixer Error: " << Mix_GetError() << "\n";

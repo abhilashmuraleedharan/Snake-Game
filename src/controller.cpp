@@ -5,10 +5,25 @@
 
 void Controller::changeDirection_(Snake &snake, Snake::Direction input,
                                  Snake::Direction opposite) const {
-  if (snake.direction != opposite || snake.size == 1) snake.direction = input;
+  /*
+   * Here the opposite direction is used to prevent the snake
+   * to move into itself if it's size is more than 1
+   */
+  if (snake.direction != opposite || snake.size == 1) {
+    snake.direction = input;
+  }
   return;
 }
 
+/*
+ * Define game controls
+ * If user closes the game window, set running as false to exit the game loop
+ * If user presses left arrow key or 'a' change the snake direction to left
+ * If user presses right arrow key or 'd' change the snake direction to right
+ * If user presses up arrow key or 'w' change the snake direction to up
+ * If user presses down arrow key or 's' change the snake direction to down
+ * If user presses q, set running as false to exit the game loop
+ */
 void Controller::handleInput(bool &running, Snake &snake) const {
   SDL_Event e;
   while (SDL_PollEvent(&e)) {

@@ -21,14 +21,14 @@ class Snake {
   void growBody();
   bool snakeCell(int x, int y);
 
-  // Public Member variables
+  // Public Data
   Direction direction = Direction::kUp;
   float speed{0.1f};
   int   size{1};
   bool  alive{true};
   float headX;
   float headY;
-  std::vector<SDL_Point> body;
+  std::vector<SDL_Point> body{};
 
  private:
   // Private methods
