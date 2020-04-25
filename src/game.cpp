@@ -45,7 +45,11 @@ void Game::run_() {
 
     // After every second, update the window title.
     if (frameEnd - titleTimestamp >= 1000) {
-      _gRenderer.updateWindowTitle(_playerName, _score, _highScore);
+      if (_disableLeaderBoardFeature) {
+        _gRenderer.updateWindowTitle(_playerName, _score, false);
+      } else {
+        _gRenderer.updateWindowTitle(_playerName, _score, true, _highScore);
+      }
       titleTimestamp = frameEnd;
     }
 
@@ -117,25 +121,48 @@ void Game::showGameBanner_() {
   std::cout << std::endl;
 }
 
+// Check whether the score in an entry in leaderboard file is valid
+bool Game::isValidScore_(std::string const &score) {
+  std::string::const_iterator it = score.begin();
+
+  // A valid score string should only be composed of digits
+  while (it != score.end() && std::isdigit(*it)) {
+     ++it;
+  }
+  return !score.empty() && it == score.end();
+}
+
 // Read the scoreboard file and store the data to game memory
 void Game::readScoreBoard_() {
-  std::string entry;
-  std::string player;
-  std::string score;
-  int pScore = 0;
   std::ifstream scoreBoardFile(kScoreBoardPath);
   if (scoreBoardFile.is_open()) {
+    std::string entry{};
     while (std::getline(scoreBoardFile, entry)) {
+      std::string player{};
+      std::string score{};
+      int pScore = 0;
       std::istringstream stream(entry);
       stream >> player >> score;
-      _scoreboard[player] = score;
-      pScore = std::stoi(score);
-      if (pScore > _highScore) { 
-        _highScore = pScore; 
-        _topScorer = player;
+      if (player.empty() || score.empty()) { 
+        // One of the entries in file is corrupted
+        _disableLeaderBoardFeature = true; 
+      }
+      if (isValidScore_(score)) {
+        _scoreboard[player] = score;
+        pScore = std::stoi(score);
+        if (pScore > _highScore) { 
+          _highScore = pScore; 
+          _topScorer = player;
+        }
+      } else { 
+        // Score value in this entry is corrupted
+        _disableLeaderBoardFeature = true; 
       }
     }
     scoreBoardFile.close();
+  } else {
+    // File is empty or missing
+    _disableLeaderBoardFeature = true;
   }
 }
 
@@ -162,7 +189,7 @@ void Game::getPlayerDetails_() {
   while(true) {
     std::cout << "Enter player name: ";
     std::cin >> _playerName;
-    if (!_scoreboard.empty()) {  // Check if scoreboard file reading was successful
+    if (!_disableLeaderBoardFeature) {  // Check if leaderboard file reading was successful
       if (newPlayer_(_playerName)) {
         std::cout << "\nNamaste " << _playerName << "\U0001F64F  Welcome to the Classic Snake Game!!" << "\n";
         std::cout << "Since you are a new player, allow me to introduce you to the game controls!" << "\n";
@@ -194,6 +221,8 @@ void Game::getPlayerDetails_() {
       std::cout << "* To control the snake, you can either use the arrow keys or the 'w','a','s','d' keys." << "\n";
       std::cout << "* To quit the game, you can either close the game window or press 'q'" << "\n\n";
       std::cout << "When you are ready to play, press 's' to start the game!!!" << std::endl;
+      std::cin >> pResponse;
+      if (pResponse == 's') { break; } else { std::cerr << "Invalid entry!\n"; }
     }
   }
 }
@@ -268,8 +297,8 @@ void Game::displayResult_() {
   int score = getScore();
   int highScore = getHighScore();
   std::cout << "Your score: " << score << "\n";
-  if (!_scoreboard.empty()) {  // Check if scoreboard file reading was successful
-                               // If not disable the leaderboard feature
+  if (!_disableLeaderBoardFeature) {  // Check if scoreboard file reading was successful
+                                      // If not disable the leaderboard feature
     if (score > highScore) {
       std::cout << "Congratulations! You are now the Scoreboard leader! \U0001F4AA" << "\n";
     }
@@ -285,8 +314,8 @@ void Game::run() {
   t2.join();
   run_();
   displayResult_();
-  if (!_scoreboard.empty()) {  // Display scoreboard only if the scoreboard.txt file could be
-                               // properly read. Otherwise disable the leaderboard feature
+  if (!_disableLeaderBoardFeature) {  // Display scoreboard only if the scoreboard.txt file could be
+                                      // properly read. Otherwise disable the leaderboard feature
     updateScoreBoard_();
     displayScoreBoard();
   }

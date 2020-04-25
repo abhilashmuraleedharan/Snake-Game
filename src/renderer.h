@@ -34,7 +34,7 @@ class Renderer {
 
   // Public methods
   void render(Snake const &snake, SDL_Point const &food);
-  void updateWindowTitle(std::string name, int score, int highScore);
+  void updateWindowTitle(std::string name, int score, bool withHighScore, int highScore = 0);
   void play(SoundEffect sound);
 
   // Public data

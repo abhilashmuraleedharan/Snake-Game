@@ -153,8 +153,13 @@ void Renderer::render(Snake const &snake, SDL_Point const &food) {
   SDL_RenderPresent(_sdlRendererPtr);
 }
 
-void Renderer::updateWindowTitle(std::string name, int score, int highScore) {
-  std::string title{"Player: " + name + "   " + " Score: " + std::to_string(score) + "   " + "Highest Score: " + std::to_string(highScore)};
+void Renderer::updateWindowTitle(std::string name, int score, bool withHighScore, int highScore) {
+  std::string title{};
+  if (withHighScore) {
+    title = std::string{"Player: " + name + "   " + " Score: " + std::to_string(score) + "   " + "Highest Score: " + std::to_string(highScore)};
+  } else {
+    title = std::string{"Player: " + name + "       " + " Score: " + std::to_string(score)};
+  }
   SDL_SetWindowTitle(_sdlWindowPtr, title.c_str());
 }
 

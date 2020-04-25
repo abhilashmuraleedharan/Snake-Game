@@ -43,6 +43,7 @@ class Game {
   void readScoreBoard_();
   void run_();
   void displayResult_();
+  bool isValidScore_(std::string const &score);
 
   // Private data
   Snake        _snake;
@@ -53,6 +54,7 @@ class Game {
   int          _highScore{0};
   std::string  _playerName{};
   std::string  _topScorer{};
+  bool         _disableLeaderBoardFeature{false};
 
   // For randomly placing food 
   std::random_device _dev;
