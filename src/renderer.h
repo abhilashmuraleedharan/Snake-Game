@@ -21,7 +21,7 @@ class Renderer {
 
   /*
    * Rule of 5 implementation
-   * Adopting a "No copy, only move" memory management policy
+   * Adopting a "No Copy, Only Move" memory management policy
    */
   Renderer(const Renderer &) = delete;             // Delete copy constructor
   Renderer &operator=(const Renderer &) = delete;  // Delete copy assignment operator
@@ -34,12 +34,12 @@ class Renderer {
 
   // Public methods
   void render(Snake const &snake, SDL_Point const &food);
-  void updateWindowTitle(int score, int fps);
+  void updateWindowTitle(std::string name, int score, int highScore);
   void play(SoundEffect sound);
 
   // Public data
-  const std::string biteSoundPath{"../assets/biting-sound.wav"};
-  const std::string deadSoundPath{"../assets/dead.wav"};
+  const std::string kBiteSoundPath{"../assets/biting-sound.wav"};
+  const std::string kDeadSoundPath{"../assets/dead.wav"};
   SoundEffect soundEffect{SoundEffect::kNoSound};
 
  private:
