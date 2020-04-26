@@ -110,6 +110,8 @@ Any contributions you make are greatly appreciated.
 5. Open a Pull Request
 6. If you found a bug, create a bugfix branch (`git checkout -b bugfix/bug`)
 7. Commit your changes (`git commit -m 'fix: Add your fix'`)
+8. Push your branch to the remote rep (`git push origin bugfix/bug`)
+9. Open a Pull Request
 
 I followed Udacity Git Commit Message Style [Guide](https://udacity.github.io/git-styleguide/).
 Please follow the same guidelines when you make your commits. 
