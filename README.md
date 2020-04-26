@@ -126,33 +126,3 @@ Any contributions you make are greatly appreciated.
 
 I followed Udacity Git Commit Message Style [Guide](https://udacity.github.io/git-styleguide/).
 Please follow the same guidelines when you make your commits. 
-
-
-## Rubric points addressed
-
-1. The project demonstrates an understanding of C++ functions and control structures.
-   This is demonstrated throughout the project while defining the class structures and definitions.
-2. The project reads data from a file and process the data, or the program writes data to a file.
-   The reading from a file part is demonstrated in the Game::readScoreBoard_() method, lines 136-167 in game.cpp
-   The writing to a file part is demonstrated in the Game::updateScoreBoard_() method, lines 279-292 in game.cpp
-3. The project accepts user input and processes the input.
-   This is demonstrated in the Game::getPlayerDetails_() method, lines 175-228 in game.cpp
-4. Classes use appropriate access specifiers for class members.
-   This is demonstrated in all the class declarations in this project.
-5. The project makes use of references in function declarations.
-   The Game::update_(bool &) method, the Game::isValidScore_(std::string const &) method, 
-   and the Renderer::render(Snake const &, SDL_Point const &) method make use of references in function declarations
-6. The project uses destructors appropriately.
-   The Renderer class destructor has been used appropriately to free the SDL Mixer chunks and to delete the SDL and
-   SDL Mixer library objects. Lines 58-65 in renderer.cpp
-7. The project uses scope / Resource Acquisition Is Initialization (RAII) where appropriate.
-   Object instances have been created on stack so that respective destructors will be called automatically when the objects go out of scope.
-8. The project follows the Rule of 5.
-   Renderer class had its own destructor. So Rule of 5 was implemented for this class. The Memory Management policy adopted here is "No Copy, Only Move" policy. Lines 22-33 in renderer.h
-9. The project uses move semantics to move data, instead of copying it, where possible.
-   This is demonstrated in 
-   Game class constructor (line 22 in main.cpp), 
-   In Snake::updateBody_(SDL_Point &&, SDL_Point &&) method (lines 58-77 in snake.cpp), 
-   In Move constructor and Move assignment operator of Renderer class (lines 67-117 in renderer.cpp) 
-10. The project uses multithreading.
-   Multithreading is used to read the scoreboard file and take user input concurrently. Threads are synchronized by introducing strategic sleep delays and by using thread barriers. Lines 311 to 314 in game.cpp
