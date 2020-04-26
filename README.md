@@ -64,7 +64,8 @@ In this project I have extendend the [Snake-Game](https://github.com/udacity/Cpp
   assets folder. When you clone this project, you will get a scoreboard.txt file with an entry already present.
 - If this scoreboard.txt file is tampered with, for instance if the file gets deleted or is empty or contain 
   invalid entries, then the game will automatically disable the leaderboard feature during the loading process.
-- The game has a retro-style block graphics.
+- The game has a retro-style block graphics. The game will run with 60 FPS. The duration of each frame is controlled
+  to give a consistent user experience irrespective of hardware.
 - The window title will show the player name, current score and the highest score (if the leaderboard feature 
   is not disabled by the game while loading).
 - Food will appear in a randomly-generated space. 
