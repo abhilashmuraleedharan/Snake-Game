@@ -27,8 +27,19 @@ In this project I have extendend the [Snake-Game](https://github.com/udacity/Cpp
   * All installation instructions can be found [here](https://wiki.libsdl.org/Installation)
   * Note that for Linux, an `apt` or `apt-get` installation is preferred to building from source. 
   * Additionally, there are detailed instructions in the LazyFoo SDL tutorial page [here](https://lazyfoo.net/tutorials/SDL/01_hello_SDL/index.php)
+  * Below are the steps I followed to install the SDL2 in my machine.
+    - Downloaded the source code from [here](http://www.libsdl.org/release/SDL2-2.0.12.tar.gz)
+    - Extracted the SDL2-2.0.12 folder from the downloaded tar.gz file.
+    - Executed following commands to build and install SDL2 in my system.
+    ```
+    cd SDL2-2.0.12
+    ./configure
+    make all
+    sudo make install
+    ```
 * SDL2 Mixer >= 2.0
   * All installation instructions can be found [here](https://www.libsdl.org/projects/SDL_mixer)
+  * SDL2 Mixer requires SDL2-2.0.12 to be already installed in the system.
   * Below are the steps I followed to install the SDL2 Mixer in my machine.
     - Downloaded the source code from [here](https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.4.tar.gz)
     - Extracted the SDL2_mixer-2.0.4 folder from the downloaded tar.gz file.
